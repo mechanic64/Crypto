@@ -1,0 +1,10 @@
+﻿  Hill.cpp
+C:\Users\Thor2\Desktop\Hill.cpp(55,20): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Thor2\Desktop\Hill.cpp(83,19): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Thor2\Desktop\Hill.cpp(116,19): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Thor2\Desktop\Hill.cpp(144,19): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Thor2\Desktop\Hill.cpp(155,19): warning C4018: '<': signed/unsigned mismatch
+C:\Users\Thor2\Desktop\Hill.cpp(180,16): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\Thor2\Desktop\Hill.cpp(181,16): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\Thor2\Desktop\Hill.cpp(188,34): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+  Hill Cipher.vcxproj -> C:\Users\Thor2\Desktop\Hill Cipher\Hill Cipher\Debug\Hill Cipher.exe
