@@ -2,11 +2,10 @@
 /// @file runHill.cpp
 /// @author Author: Ben Olson
 /// 
-/// @details This program takes in information or documents and encodes
-/// or decodes it using the hill cipher. 
+/// @details Driver program for the hill cipher program
 /// 
 /// Started 3-16-2017
-/// 
+/// Last Updated 11-28-2021
 /// 
 ///******************************************************************
 
@@ -40,9 +39,9 @@ int main()
 
 		switch (selection)
 		{
-		case 1: cipher.Encode(); cout << cipher.getCipherText() << endl; break;
-		case 2: cipher.Decode(); cout << cipher.getPlainText() << endl; break;
-		default: cout << "Please input an option in the list" << endl;
+			case 1: cipher.Encode(); cout << cipher.getCipherText() << endl; break;
+			case 2: cipher.Decode(); cout << cipher.getPlainText() << endl; break;
+			default: cout << "Please input an option in the list" << endl;
 		}
 		cout << "Would you like to continue" << endl;
 		cin >> answer;
