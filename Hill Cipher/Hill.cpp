@@ -6,7 +6,7 @@
 /// required to process the file provided
 /// 
 /// Started 3-16-2017
-/// Last Updated 11-28-2021
+/// Last Updated 04-22-24
 /// 
 ///******************************************************************
 
@@ -16,6 +16,9 @@
 #include <iostream>
 #include "matrix.h"
 #include "Hill.h"
+#include <iomanip>
+#include <stdexcept>
+#include <math.h>
 
 
 /// @brief Sets the plainText string with the passed data and saves a copy
@@ -199,7 +202,7 @@ void Hill::setKey(string a)
 void Hill::REAsetKey()
 {
 	//http://www-math.ucdenver.edu/~wcherowi/courses/m5410/exeucalg.html
-	//math goes here lol, the key should already be loaded so we can use the key matrix
+	//math goes here, the key should already be loaded so we can use the key matrix
 	//just need to find the inverse of it, set it, and then use it
 	int b[2][2] = { 0,0,0,0 };
 
@@ -223,15 +226,32 @@ void Hill::REAsetKey()
 		}
 	}*/
 
+	if (getDeterminant(key) == 0) {
+		throw std::runtime_error("Determinant is 0");
+	}
+
+	double d = 1.0 / getDeterminant(vect);
+	std::vector<std::vector<double>> solution(vect.size(), std::vector<double>(vect.size()));
+
+	for (size_t i = 0; i < vect.size(); i++) {
+		for (size_t j = 0; j < vect.size(); j++) {
+			solution[i][j] = vect[i][j] * d;
+		}
+	}
+	return getTranspose(getCofactor(solution));
+
 	int i, j, k;
 	float p, q;
 	for (i = 0; i < 2; i++)
-		for (j = 0; j < 2; j++) {
+	{
+		for (j = 0; j < 2; j++)
+		{
 			if (i == j)
 				b[i][j] = 1;
 			else
 				b[i][j] = 0;
 		}
+	}
 	for (k = 0; k < 2; k++) {
 		for (i = 0; i < 2; i++) {
 			p = key[i][k];
@@ -274,4 +294,88 @@ string Hill::getCipherText()
 string Hill::getPlainText()
 {
 	return plainText;
+}
+
+double getDeterminant(const std::vector<std::vector<double>>& vect) 
+{
+	if (vect.size() != vect[0].size()) {
+		throw std::runtime_error("Matrix is not quadratic");
+	}
+
+	int dimension = vect.size();
+	if (dimension == 0) {
+		return 1;
+	}
+	if (dimension == 1) {
+		return vect[0][0];
+	}
+	// Formula for 2x2 matrix
+	if (dimension == 2) {
+		return vect[0][0] * vect[1][1] - vect[0][1] * vect[1][0];
+	}
+
+	double result = 0;
+	int sign = 1;
+	for (int i = 0; i < dimension; i++) {
+		// Submatrix
+		std::vector<std::vector<double>> subVect(dimension - 1, std::vector<double>(dimension - 1));
+		for (int m = 1; m < dimension; m++) {
+			int z = 0;
+			for (int n = 0; n < dimension; n++) {
+				if (n != i) {
+					subVect[m - 1][z] = vect[m][n];
+					z++;
+				}
+			}
+		}
+		// Recursive call
+		result = result + sign * vect[0][i] * getDeterminant(subVect);
+		sign = -sign;
+	}
+	return result;
+}
+
+std::vector<std::vector<double>> getTranspose(const std::vector<std::vector<double>>& matrix1) 
+{
+	// Transpose-matrix: height = width(matrix), width = height(matrix)
+	std::vector<std::vector<double>> solution(matrix1[0].size(), std::vector<double>(matrix1.size()));
+	// Filling solution-matrix
+	for (size_t i = 0; i < matrix1.size(); i++) {
+		for (size_t j = 0; j < matrix1[0].size(); j++) {
+			solution[j][i] = matrix1[i][j];
+		}
+	}
+	return solution;
+}
+
+std::vector<std::vector<double>> getCofactor(const std::vector<std::vector<double>>& vect) 
+{
+	if (vect.size() != vect[0].size()) {
+		throw std::runtime_error("Matrix is not quadratic");
+	}
+
+	std::vector<std::vector<double>> solution(vect.size(), std::vector<double>(vect.size()));
+	std::vector<std::vector<double>> subVect(vect.size() - 1, std::vector<double>(vect.size() - 1));
+
+	for (size_t i = 0; i < vect.size(); i++) {
+		for (size_t j = 0; j < vect[0].size(); j++) {
+			int p = 0;
+			for (size_t x = 0; x < vect.size(); x++) {
+				if (x == i) {
+					continue;
+				}
+				int q = 0;
+				for (size_t y = 0; y < vect.size(); y++) {
+					if (y == j) {
+						continue;
+					}
+					subVect[p][q] = vect[x][y];
+					q++;
+				}
+				p++;
+			}
+			solution[i][j] = pow(-1, i + j) * getDeterminant(subVect);
+		}
+	}
+	return solution;
 }

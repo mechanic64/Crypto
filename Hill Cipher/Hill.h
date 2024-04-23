@@ -31,7 +31,7 @@ class Hill
 	vector<matrix> matrixList; //array that holds the text as matrices
 	string savedText; //a copy of the original message
 	string cipherText;
-	int key[2][2];
+	vector<double> key[2][2];
 
 public:
 
